@@ -24,7 +24,7 @@ spec:
       containers:
       - name: go-app
         # O GitHub Actions vai atualizar a tag automaticamente aqui
-        image: geovannyribeiro/go-homelab:0b37ffa29c78b46f3278133705150300c2f110a3
+        image: geovannyribeiro/go-homelab:ae0c882a6491a5802a7f65413a0ba6a6d250f315
         imagePullPolicy: IfNotPresent 
         ports:
         - containerPort: 8080
