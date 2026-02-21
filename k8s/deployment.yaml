@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-homelab
+  namespace: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-homelab
+  template:
+    metadata:
+      labels:
+        app: go-homelab
+      annotations:
+        # Instruções para o Prometheus coletar dados automaticamente
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        fsGroup: 65532
+      containers:
+      - name: go-app
+        image: go-homelab:local
+        imagePullPolicy: Never
+        # Porta onde o servidor http do Go vai rodar as métricas
+        ports:
+        - containerPort: 8080
+          name: metrics
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true 
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "100m"

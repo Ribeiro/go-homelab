@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: go-homelab-monitor
+  namespace: observability
+  labels:
+    # Esta label é CRUCIAL. Ela deve bater com o seletor do seu Prometheus
+    # Geralmente é o nome do release do Helm. 
+    # Tente 'prometheus-kube-prometheus' baseado no seu log de 'up'
+    release: prometheus-kube-prometheus 
+spec:
+  selector:
+    matchLabels:
+      app: go-homelab # Deve ser igual à label no seu Service
+  namespaceSelector:
+    matchNames:
+      - observability
+  endpoints:
+  - port: metrics # Nome da porta definido no seu Service
+    interval: 15s
+    path: /metrics
