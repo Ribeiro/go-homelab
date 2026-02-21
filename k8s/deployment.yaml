@@ -13,7 +13,6 @@ spec:
       labels:
         app: go-homelab
       annotations:
-        # Instruções para o Prometheus coletar dados automaticamente
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
         prometheus.io/path: "/metrics"
@@ -24,15 +23,15 @@ spec:
         fsGroup: 65532
       containers:
       - name: go-app
-        image: go-homelab:local
-        imagePullPolicy: Never
-        # Porta onde o servidor http do Go vai rodar as métricas
+        # O GitHub Actions vai atualizar a tag automaticamente aqui
+        image: geovannyribeiro/go-homelab:latest 
+        imagePullPolicy: IfNotPresent 
         ports:
         - containerPort: 8080
           name: metrics
         securityContext:
           allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true 
+          readOnlyRootFilesystem: true
           capabilities:
             drop:
               - ALL
